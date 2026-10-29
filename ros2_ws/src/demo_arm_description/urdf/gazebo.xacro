@@ -108,6 +108,7 @@
         <always_on>true</always_on>
         <update_rate>100</update_rate>
         <topic>wrist_ft</topic>
+        <gz_frame_id>link5</gz_frame_id>
         <force_torque>
           <frame>child</frame>
           <measure_direction>child_to_parent</measure_direction>

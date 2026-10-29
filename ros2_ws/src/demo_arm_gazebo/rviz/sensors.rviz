@@ -18,6 +18,7 @@ Visualization Manager:
       Name: RealSense points
       Topic:
         Value: /camera/camera/depth/color/points
+        Reliability Policy: Best Effort
       Style: Points
       Size (Pixels): 2
       Color Transformer: RGB8
@@ -35,15 +36,13 @@ Visualization Manager:
       Color Transformer: FlatColor
       Color: 255; 80; 160
       Value: true
-    - Class: rviz_default_plugins/Imu
-      Name: IMU
-      Topic:
-        Value: /imu
-      Value: false
     - Class: rviz_default_plugins/Wrench
       Name: Wrist force-torque
       Topic:
         Value: /wrist_ft
+      Force Arrow Scale: 0.1
+      Torque Arrow Scale: 1.0
+      Arrow Width: 0.1
       Value: true
   Global Options:
     Fixed Frame: world

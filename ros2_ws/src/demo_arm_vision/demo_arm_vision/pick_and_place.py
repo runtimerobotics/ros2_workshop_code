@@ -115,7 +115,9 @@ class PickAndPlace:
         plan = component.plan(single_plan_parameters=self.lin) if straight else component.plan()
         if not plan:
             raise StepFailed(f'{what}: no plan found')
-        self.moveit.execute(plan.trajectory, controllers=[])
+        status = self.moveit.execute(plan.trajectory, controllers=[])
+        if not status:
+            raise StepFailed(f'{what}: execution {status.status}')
         self.log.info(f'{what}: done')
 
     def move_arm(self, what, x, y, z, yaw, straight=False):
@@ -146,15 +148,34 @@ class PickAndPlace:
         self.run(self.gripper, 'open gripper', configuration_name='open')
         self.move_arm('retreat (straight up)', px, py, place_z + h.approach, 0.0, straight=True)
 
+    def wait_for_controllers(self, tries=10):
+        # MoveItPy's controller action clients connect a moment after start-up;
+        # until then every execution is ABORTED, so retry the first moves
+        for attempt in range(tries):
+            try:
+                self.run(self.arm, 'home', configuration_name='home')
+                self.run(self.gripper, 'open gripper', configuration_name='open')
+                return
+            except StepFailed as e:
+                if attempt == tries - 1:
+                    raise
+                self.log.warning(f'{e}; controllers not ready, retrying')
+                time.sleep(1.0)
+
     def main(self):
-        self.run(self.arm, 'home', configuration_name='home')
+        self.wait_for_controllers()
+        skipped = []
         for slot, color in enumerate(self.h.order):
             try:
                 self.pick_and_place(color, slot)
             except StepFailed as e:
                 self.log.error(f'{color} box skipped: {e}')
+                skipped.append(color)
         self.run(self.arm, 'home', configuration_name='home')
-        self.log.info('pick and place finished')
+        if skipped:
+            self.log.error(f'pick and place incomplete: skipped {", ".join(skipped)}')
+        else:
+            self.log.info('pick and place finished')
 
 
 def main():
