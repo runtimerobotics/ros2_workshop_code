@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt-get update
+          apt-get upgrade -y        # the image can be older than the newest ROS packages
           apt-get install -y --no-install-recommends \
             ros-${ROS_DISTRO}-ros-gz ros-${ROS_DISTRO}-gz-ros2-control \
             ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers \
