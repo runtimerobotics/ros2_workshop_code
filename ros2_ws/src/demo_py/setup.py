@@ -36,6 +36,7 @@ setup(
             'minimal_param_node = demo_py.minimal_param_node:main',
             'heartbeat = demo_py.heartbeat:main',
             'executor_demo = demo_py.executor_demo:main',
+            'logging_demo = demo_py.logging_demo:main',
         ],
     },
 )

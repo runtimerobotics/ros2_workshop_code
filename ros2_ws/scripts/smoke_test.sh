@@ -29,7 +29,7 @@ echo "== Day 1: topics, services, actions, parameters"
 bg 8 ros2 run demo_py talker;  expect "Python talker → C++ listener" "I heard: 'Hello" 6 ros2 run demo_cpp listener; cleanup
 bg 8 ros2 run demo_cpp talker; expect "C++ talker → Python listener" "I heard: Hello" 6 ros2 run demo_py listener; cleanup
 bg 8 ros2 run demo_cpp add_two_ints_server; sleep 2
-expect "service: 4 + 5" "sum: 9" 6 ros2 run demo_py add_two_ints_client 4 5; cleanup
+expect "service: 2 + 3" "sum: 5" 6 ros2 run demo_py add_two_ints_client; cleanup
 bg 15 ros2 run demo_py fibonacci_action_server; sleep 2
 expect "action: Fibonacci with feedback" "result: \[0, 1, 1, 2, 3\]" 12 ros2 run demo_py fibonacci_action_client 4; cleanup
 bg 12 ros2 run demo_py minimal_param_node; sleep 3
@@ -47,7 +47,7 @@ expect "launch XML + YAML includes" "/from_yaml/turtlesim" 5 ros2 node list; cle
 
 echo "== Day 2: tf2"
 bg 8 ros2 run demo_tf2 static_frames; sleep 2
-expect "static transform" "Translation: \[0.150, 0.000, 0.120\]" 6 ros2 run tf2_ros tf2_echo base_link camera_link; cleanup
+expect "static transform" "Translation: \[0.100, 0.000, 0.200\]" 6 ros2 run tf2_ros tf2_echo base_link lidar_link; cleanup
 
 echo "== Day 3: ros2_control and MoveIt with mock hardware"
 bg 60 ros2 launch demo_arm_moveit demo.launch.py rviz:=false; sleep 15

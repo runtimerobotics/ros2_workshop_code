@@ -24,7 +24,8 @@ class MinimalParam(Node):
     def on_set(self, params):
         for p in params:
             if p.name == 'my_parameter' and not p.value:
-                return SetParametersResult(successful=False, reason='name is empty')
+                return SetParametersResult(
+                    successful=False, reason='name is empty')
         return SetParametersResult(successful=True)
 
 

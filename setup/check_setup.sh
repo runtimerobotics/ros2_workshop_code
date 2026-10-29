@@ -18,6 +18,7 @@ check "ros2_control installed"         ros2 pkg prefix controller_manager
 check "gz_ros2_control installed"      ros2 pkg prefix gz_ros2_control
 check "MoveIt 2 installed"             ros2 pkg prefix moveit_ros_move_group
 check "moveit_py installed"            python3 -c "import moveit"
+check "pick_ik installed"              ros2 pkg prefix pick_ik
 check "RealSense description installed" ros2 pkg prefix realsense2_description
 check "OpenCV for Python installed"    python3 -c "import cv2"
 

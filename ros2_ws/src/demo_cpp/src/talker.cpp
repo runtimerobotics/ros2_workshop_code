@@ -12,7 +12,6 @@ public:
     timer_ = create_wall_timer(500ms, [this]() {
       std_msgs::msg::String msg;
       msg.data = "Hello " + std::to_string(count_++);
-      RCLCPP_INFO(get_logger(), "Publishing: '%s'", msg.data.c_str());
       pub_->publish(msg);
     });
   }

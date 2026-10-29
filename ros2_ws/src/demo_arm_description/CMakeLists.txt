@@ -3,7 +3,7 @@ project(demo_arm_description)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY urdf launch rviz DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY urdf launch rviz DESTINATION share/${PROJECT_NAME})   # urdf/ includes examples/
 
 if(BUILD_TESTING)
   # every variant of the model must expand and parse

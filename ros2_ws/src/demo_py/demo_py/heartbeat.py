@@ -11,7 +11,8 @@ from rclpy.node import Node
 class Heartbeat(Node):
     def __init__(self):
         super().__init__('heartbeat')
-        self.timer = self.create_timer(0.5, self.on_timer)
+        self.timer = self.create_timer(
+            0.5, self.on_timer)
 
     def on_timer(self):
         self.get_logger().info('alive')

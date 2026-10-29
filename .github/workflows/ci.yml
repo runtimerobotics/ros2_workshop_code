@@ -28,6 +28,7 @@ jobs:
 
       - name: Basics (shell, Python, C++)
         run: |
+          source /opt/ros/jazzy/setup.bash     # 03_callbacks.py imports std_msgs
           bash 00_linux_basics/navigate_exercise.sh > /dev/null
           bash 00_linux_basics/scripts/hello.sh CI 2
           for f in 01_python_basics/0[1-4]_*.py; do python3 "$f"; done

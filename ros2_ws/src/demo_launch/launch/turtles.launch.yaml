@@ -1,5 +1,4 @@
 # The same node again, in YAML.
-#   ros2 launch demo_launch turtles.launch.yaml ns:=robot1
 launch:
 - arg:
     name: ns
@@ -11,3 +10,5 @@ launch:
     param:
     - name: background_r
       value: 200
+
+# ros2 launch demo_launch turtles.launch.yaml ns:=robot1

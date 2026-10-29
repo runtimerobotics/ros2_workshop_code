@@ -1,4 +1,5 @@
-"""Self-check: predict the output before you run it.
+"""
+Self-check: predict the output before you run it.
 
 1. How many times is "battery ..." printed?
 2. What is the last line?
@@ -6,7 +7,6 @@
 
 Run: python3 04_self_check.py      (answers: solutions/04_self_check.md)
 """
-
 
 class Robot:
     def __init__(self, name, on_change):
@@ -20,7 +20,6 @@ class Robot:
             return
         self.battery -= 10
         self.on_change(self.battery)
-
 
 r = Robot('rover', lambda b: print(f'battery {b}%'))
 for _ in range(10):

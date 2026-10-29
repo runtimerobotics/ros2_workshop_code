@@ -23,12 +23,12 @@ class FrameListener(Node):
 
     def on_timer(self):
         try:
-            t = self.buffer.lookup_transform(self.target, self.source, Time())   # Time() = latest
+            t = self.buffer.lookup_transform(self.target, self.source, Time())
         except TransformException as ex:
             self.get_logger().info(f'not yet: {ex}')
             return
         p = t.transform.translation
-        self.get_logger().info(f'{self.source} in {self.target}: x={p.x:.2f} y={p.y:.2f}')
+        self.get_logger().info(f'{self.source} at x={p.x:.2f} y={p.y:.2f}')
 
 
 def main():

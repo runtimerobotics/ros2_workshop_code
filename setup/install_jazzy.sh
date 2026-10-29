@@ -25,13 +25,12 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y ros-jazzy-desktop ros-dev-tools
 
 echo "== 5. Packages for the Day 2 and Day 3 labs"
-sudo apt install -y \
-  ros-jazzy-ros-gz ros-jazzy-gz-ros2-control \
+# Required for the Day 2 and Day 3 labs
+sudo apt install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control \
   ros-jazzy-ros2-control ros-jazzy-ros2-controllers \
   ros-jazzy-xacro ros-jazzy-joint-state-publisher-gui \
-  ros-jazzy-moveit ros-jazzy-moveit-py \
-  ros-jazzy-realsense2-description \
-  ros-jazzy-cv-bridge python3-opencv
+  ros-jazzy-moveit ros-jazzy-moveit-py ros-jazzy-pick-ik \
+  ros-jazzy-realsense2-description ros-jazzy-cv-bridge python3-opencv
 
 echo "== 6. rosdep"
 [[ -f /etc/ros/rosdep/sources.list.d/20-default.list ]] || sudo rosdep init

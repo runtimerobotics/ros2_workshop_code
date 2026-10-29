@@ -2,7 +2,8 @@
      ros2 launch demo_launch turtles.launch.xml ns:=robot1 -->
 <launch>
   <arg name="ns" default="turtlesim1"/>
-  <node pkg="turtlesim" exec="turtlesim_node" namespace="$(var ns)">
+  <node pkg="turtlesim" exec="turtlesim_node"
+        namespace="$(var ns)">
     <param name="background_r" value="200"/>
   </node>
 </launch>

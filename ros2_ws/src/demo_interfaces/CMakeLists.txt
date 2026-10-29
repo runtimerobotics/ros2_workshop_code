@@ -6,8 +6,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 # Generates Python and C++ code for every interface listed here
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/Num.msg"
-  "srv/AddThreeInts.srv"
+  "msg/Num.msg" "srv/AddThreeInts.srv"
   "action/Fibonacci.action")
 
 ament_export_dependencies(rosidl_default_runtime)

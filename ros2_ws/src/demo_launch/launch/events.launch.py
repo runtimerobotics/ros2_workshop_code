@@ -6,7 +6,8 @@ Run:
     (close the turtlesim window: the whole launch stops)
 """
 from launch import LaunchDescription
-from launch.actions import EmitEvent, ExecuteProcess, LogInfo, RegisterEventHandler
+from launch.actions import (EmitEvent, ExecuteProcess, LogInfo,
+                            RegisterEventHandler)
 from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.events import Shutdown
 from launch_ros.actions import Node

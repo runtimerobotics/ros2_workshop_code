@@ -22,14 +22,13 @@ class FibonacciActionServer(Node):
             cancel_callback=lambda goal: CancelResponse.ACCEPT)
 
     def execute(self, goal_handle):
-        self.get_logger().info(f'goal: order {goal_handle.request.order}')
         fb = Fibonacci.Feedback(partial_sequence=[0, 1])
         for i in range(1, goal_handle.request.order):
             if goal_handle.is_cancel_requested:
                 goal_handle.canceled()
-                self.get_logger().info('goal canceled')
                 return Fibonacci.Result(sequence=fb.partial_sequence)
-            fb.partial_sequence.append(fb.partial_sequence[i] + fb.partial_sequence[i - 1])
+            fb.partial_sequence.append(
+                fb.partial_sequence[i] + fb.partial_sequence[i - 1])
             goal_handle.publish_feedback(fb)
             time.sleep(1)
         goal_handle.succeed()

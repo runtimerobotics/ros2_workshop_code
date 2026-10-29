@@ -8,7 +8,7 @@ Services:
 ```bash
 ros2 run demo_py add_two_ints_server          # or: ros2 run demo_cpp add_two_ints_server
 ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 2, b: 3}"
-ros2 run demo_py add_two_ints_client 4 5      # sum: 9, without blocking the node
+ros2 run demo_py add_two_ints_client          # sum: 5, without blocking the node
 
 ros2 run demo_py add_three_ints_server        # your own .srv
 ros2 service call /add_three_ints demo_interfaces/srv/AddThreeInts "{a: 1, b: 2, c: 3}"
@@ -18,7 +18,7 @@ Actions:
 
 ```bash
 ros2 run demo_py fibonacci_action_server
-ros2 run demo_py fibonacci_action_client 8                     # feedback every second
+ros2 run demo_py fibonacci_action_client 8     # feedback every second, then the result
 ros2 action send_goal --feedback fibonacci demo_interfaces/action/Fibonacci "{order: 10}"
 #   press Ctrl+C during the goal: the server reports it canceled
 ```

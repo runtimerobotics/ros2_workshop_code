@@ -13,12 +13,11 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
-        DeclareLaunchArgument('ns', default_value='turtlesim1',
-                              description='Namespace for the node'),
-        DeclareLaunchArgument('background_r', default_value='69',
-                              description='Red channel, 0-255'),
+        DeclareLaunchArgument('ns', default_value='turtlesim1'),
+        DeclareLaunchArgument('background_r', default_value='69'),
         Node(
             package='turtlesim', executable='turtlesim_node',
             namespace=LaunchConfiguration('ns'),
-            parameters=[{'background_r': LaunchConfiguration('background_r')}]),
+            parameters=[{
+                'background_r': LaunchConfiguration('background_r')}]),
     ])
