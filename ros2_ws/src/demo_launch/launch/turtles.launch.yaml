@@ -1,0 +1,13 @@
+# The same node again, in YAML.
+#   ros2 launch demo_launch turtles.launch.yaml ns:=robot1
+launch:
+- arg:
+    name: ns
+    default: turtlesim1
+- node:
+    pkg: turtlesim
+    exec: turtlesim_node
+    namespace: $(var ns)
+    param:
+    - name: background_r
+      value: 200

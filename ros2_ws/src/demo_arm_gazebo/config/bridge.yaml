@@ -1,0 +1,80 @@
+# ros_gz_bridge: Gazebo topics on the right, ROS topics on the left.
+# Camera topics use the same names as the real realsense2_camera driver, so the vision
+# code runs unchanged on a real D435 (with align_depth.enable:=true).
+
+- ros_topic_name: /clock
+  gz_topic_name: /clock
+  ros_type_name: rosgraph_msgs/msg/Clock
+  gz_type_name: gz.msgs.Clock
+  direction: GZ_TO_ROS
+
+# RealSense D435 (rgbd_camera)
+- ros_topic_name: /camera/camera/color/image_raw
+  gz_topic_name: /camera/image
+  ros_type_name: sensor_msgs/msg/Image
+  gz_type_name: gz.msgs.Image
+  direction: GZ_TO_ROS
+- ros_topic_name: /camera/camera/color/camera_info
+  gz_topic_name: /camera/camera_info
+  ros_type_name: sensor_msgs/msg/CameraInfo
+  gz_type_name: gz.msgs.CameraInfo
+  direction: GZ_TO_ROS
+- ros_topic_name: /camera/camera/aligned_depth_to_color/image_raw
+  gz_topic_name: /camera/depth_image
+  ros_type_name: sensor_msgs/msg/Image
+  gz_type_name: gz.msgs.Image
+  direction: GZ_TO_ROS
+- ros_topic_name: /camera/gz_points          # relabelled by points_frame_fix.py
+  gz_topic_name: /camera/points
+  ros_type_name: sensor_msgs/msg/PointCloud2
+  gz_type_name: gz.msgs.PointCloudPacked
+  direction: GZ_TO_ROS
+
+# 2D lidar, IMU, wrist force-torque, finger contacts
+- ros_topic_name: /scan
+  gz_topic_name: /scan
+  ros_type_name: sensor_msgs/msg/LaserScan
+  gz_type_name: gz.msgs.LaserScan
+  direction: GZ_TO_ROS
+- ros_topic_name: /imu
+  gz_topic_name: /imu
+  ros_type_name: sensor_msgs/msg/Imu
+  gz_type_name: gz.msgs.IMU
+  direction: GZ_TO_ROS
+- ros_topic_name: /wrist_ft
+  gz_topic_name: /wrist_ft
+  ros_type_name: geometry_msgs/msg/WrenchStamped
+  gz_type_name: gz.msgs.Wrench
+  direction: GZ_TO_ROS
+- ros_topic_name: /left_finger/contact
+  gz_topic_name: /left_finger/contact
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  gz_type_name: gz.msgs.Contacts
+  direction: GZ_TO_ROS
+- ros_topic_name: /right_finger/contact
+  gz_topic_name: /right_finger/contact
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  gz_type_name: gz.msgs.Contacts
+  direction: GZ_TO_ROS
+
+# lock a box to the gripper and release it (DetachableJoint)
+- ros_topic_name: /demo_arm/red_box/attach
+  gz_topic_name: /demo_arm/red_box/attach
+  ros_type_name: std_msgs/msg/Empty
+  gz_type_name: gz.msgs.Empty
+  direction: ROS_TO_GZ
+- ros_topic_name: /demo_arm/red_box/detach
+  gz_topic_name: /demo_arm/red_box/detach
+  ros_type_name: std_msgs/msg/Empty
+  gz_type_name: gz.msgs.Empty
+  direction: ROS_TO_GZ
+- ros_topic_name: /demo_arm/blue_box/attach
+  gz_topic_name: /demo_arm/blue_box/attach
+  ros_type_name: std_msgs/msg/Empty
+  gz_type_name: gz.msgs.Empty
+  direction: ROS_TO_GZ
+- ros_topic_name: /demo_arm/blue_box/detach
+  gz_topic_name: /demo_arm/blue_box/detach
+  ros_type_name: std_msgs/msg/Empty
+  gz_type_name: gz.msgs.Empty
+  direction: ROS_TO_GZ

@@ -1,0 +1,41 @@
+# ros2_control controllers for demo_arm. Used by Gazebo (gz_ros2_control) and by the
+# mock hardware in mock.launch.py, so both behave the same from the outside.
+controller_manager:
+  ros__parameters:
+    update_rate: 100   # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+arm_controller:
+  ros__parameters:
+    joints: [joint1, joint2, joint3, joint4, joint5]
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    state_publish_rate: 50.0
+    allow_nonzero_velocity_at_trajectory_end: false
+    constraints:
+      stopped_velocity_tolerance: 0.05
+      goal_time: 1.0          # the goal may finish up to 1 s late
+      joint1: {trajectory: 0.2, goal: 0.02}
+      joint2: {trajectory: 0.2, goal: 0.02}
+      joint3: {trajectory: 0.2, goal: 0.02}
+      joint4: {trajectory: 0.2, goal: 0.02}
+      joint5: {trajectory: 0.2, goal: 0.02}
+
+gripper_controller:
+  ros__parameters:
+    joints: [left_finger_joint, right_finger_joint]
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    # Closing on a box stops the fingers before they reach the target, so no goal
+    # tolerance is checked (0 = off): the goal succeeds when the motion time is up.
+    constraints:
+      stopped_velocity_tolerance: 0.0
+      goal_time: 0.0
+      left_finger_joint: {trajectory: 0.0, goal: 0.0}
+      right_finger_joint: {trajectory: 0.0, goal: 0.0}

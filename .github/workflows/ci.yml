@@ -1,0 +1,52 @@
+name: build and test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  jazzy:
+    runs-on: ubuntu-24.04
+    container: osrf/ros:jazzy-desktop-full
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ros-jazzy-ros-gz ros-jazzy-gz-ros2-control \
+            ros-jazzy-ros2-control ros-jazzy-ros2-controllers \
+            ros-jazzy-moveit ros-jazzy-moveit-py ros-jazzy-pick-ik \
+            ros-jazzy-realsense2-description ros-jazzy-cv-bridge python3-opencv
+          source /opt/ros/jazzy/setup.bash
+          rosdep update
+          rosdep install --from-paths ros2_ws/src --ignore-src -y
+
+      - name: Basics (shell, Python, C++)
+        run: |
+          bash 00_linux_basics/navigate_exercise.sh > /dev/null
+          bash 00_linux_basics/scripts/hello.sh CI 2
+          for f in 01_python_basics/0[1-4]_*.py; do python3 "$f"; done
+          python3 01_python_basics/solutions/05_exercise_turtle_path.py
+          cd 02_cpp_cmake_basics/02_robot_lib
+          cmake -S . -B build && cmake --build build && (cd build && ctest --output-on-failure)
+
+      - name: Build
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          cd ros2_ws && colcon build --symlink-install --event-handlers console_cohesion+
+
+      - name: Test
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          cd ros2_ws && colcon test && colcon test-result --verbose
+
+      - name: Smoke-run the examples
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          source ros2_ws/install/setup.bash
+          bash ros2_ws/scripts/smoke_test.sh

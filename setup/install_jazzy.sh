@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Install ROS 2 Jazzy and everything the workshop labs need on Ubuntu 24.04.
+# Usage: bash setup/install_jazzy.sh
+set -euo pipefail
+
+if [[ "$(. /etc/os-release && echo "$VERSION_CODENAME")" != "noble" ]]; then
+  echo "ROS 2 Jazzy needs Ubuntu 24.04 (noble). For Ubuntu 26.04 use ROS 2 Lyrical." >&2
+  exit 1
+fi
+
+echo "== 1-2. Locale and universe repository"
+sudo apt update && sudo apt install -y locales software-properties-common curl
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+sudo add-apt-repository -y universe
+
+echo "== 3. ROS 2 apt source"
+ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+curl -L -o /tmp/ros2-apt-source.deb \
+  "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo "$VERSION_CODENAME")_all.deb"
+sudo dpkg -i /tmp/ros2-apt-source.deb
+
+echo "== 4. ROS 2 desktop and developer tools"
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y ros-jazzy-desktop ros-dev-tools
+
+echo "== 5. Packages for the Day 2 and Day 3 labs"
+sudo apt install -y \
+  ros-jazzy-ros-gz ros-jazzy-gz-ros2-control \
+  ros-jazzy-ros2-control ros-jazzy-ros2-controllers \
+  ros-jazzy-xacro ros-jazzy-joint-state-publisher-gui \
+  ros-jazzy-moveit ros-jazzy-moveit-py \
+  ros-jazzy-realsense2-description \
+  ros-jazzy-cv-bridge python3-opencv
+
+echo "== 6. rosdep"
+[[ -f /etc/ros/rosdep/sources.list.d/20-default.list ]] || sudo rosdep init
+rosdep update
+
+grep -qxF 'source /opt/ros/jazzy/setup.bash' ~/.bashrc || echo 'source /opt/ros/jazzy/setup.bash' >> ~/.bashrc
+echo "Done. Open a new terminal, then run: bash setup/check_setup.sh"

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!-- Sensor frames and mounts. What each sensor measures in Gazebo is in gazebo.xacro.
+
+     camera_*   Intel RealSense D435 on a stand, looking straight down at the table
+     lidar_link 2D lidar on the front of the pedestal, scanning at floor level
+     imu_link   IMU in the gripper palm
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
+
+  <xacro:macro name="demo_sensors" params="camera_x:=0.40 camera_z:=1.0">
+
+    <!-- the camera stand: a pole beside the table and a beam over it -->
+    <link name="camera_stand">
+      <visual>
+        <origin xyz="0 0 ${camera_z / 2}"/>
+        <geometry><box size="0.03 0.03 ${camera_z}"/></geometry>
+        <material name="grey"/>
+      </visual>
+      <visual>
+        <origin xyz="0 0.275 ${camera_z + 0.04}"/>
+        <geometry><box size="0.03 0.58 0.03"/></geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${camera_z / 2}"/>
+        <geometry><box size="0.03 0.03 ${camera_z}"/></geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 0.275 ${camera_z + 0.04}"/>
+        <geometry><box size="0.03 0.58 0.03"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="2.0"/>
+        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.01"/>
+      </inertial>
+    </link>
+    <joint name="camera_stand_joint" type="fixed">
+      <parent link="world"/>
+      <child link="camera_stand"/>
+      <origin xyz="${camera_x} -0.55 0"/>
+    </joint>
+
+    <!-- RealSense D435: the official frames and mesh. camera_link is x forward,
+         so pitch +90° points it at the table. -->
+    <link name="camera_mount"/>
+    <joint name="camera_mount_joint" type="fixed">
+      <parent link="camera_stand"/>
+      <child link="camera_mount"/>
+      <origin xyz="0 0.55 ${camera_z}" rpy="0 ${pi / 2} 0"/>
+    </joint>
+    <xacro:sensor_d435 parent="camera_mount" name="camera" use_nominal_extrinsics="true">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:sensor_d435>
+
+    <link name="lidar_link">
+      <visual>
+        <origin xyz="0 0 0.02"/>
+        <geometry><cylinder radius="0.03" length="0.04"/></geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.02"/>
+        <geometry><cylinder radius="0.03" length="0.04"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.1"/>
+        <inertia ixx="3e-5" ixy="0" ixz="0" iyy="3e-5" iyz="0" izz="4.5e-5"/>
+      </inertial>
+    </link>
+    <joint name="lidar_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="lidar_link"/>
+      <origin xyz="0.1 0 0.03"/>
+    </joint>
+
+    <link name="imu_link"/>
+    <joint name="imu_joint" type="fixed">
+      <parent link="link5"/>
+      <child link="imu_link"/>
+      <origin xyz="0 0 0.01"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

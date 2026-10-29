@@ -1,0 +1,15 @@
+# 3D vision for MoveIt: the RealSense point cloud becomes an occupancy map (OctoMap)
+# in the planning scene, so unknown obstacles on the table are avoided automatically.
+# Points on the robot itself are removed first (self-filtering with padding).
+# Loaded only with vision:=true (see launch/moveit_config.py).
+sensors:
+  - realsense_points
+realsense_points:
+  sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+  point_cloud_topic: /camera/camera/depth/color/points
+  max_range: 1.2
+  point_subsample: 2
+  padding_offset: 0.03
+  padding_scale: 1.0
+  max_update_rate: 2.0
+  filtered_cloud_topic: /octomap_filtered_cloud

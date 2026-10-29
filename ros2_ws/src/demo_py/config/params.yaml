@@ -1,0 +1,6 @@
+# Parameters for demo.launch.py. Change rate, then launch again: no rebuild needed
+# with colcon build --symlink-install.
+rate_talker:
+  ros__parameters:
+    rate: 4.0
+    prefix: "Hello from YAML"

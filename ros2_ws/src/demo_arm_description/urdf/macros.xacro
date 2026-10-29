@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- A box link whose box starts at the link origin and extends along +z, like RRBot's links.
+       Inertia is a solid box of mass m about its centre. -->
+  <xacro:macro name="box_link" params="name x y z mass material">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 ${z / 2}"/>
+        <geometry><box size="${x} ${y} ${z}"/></geometry>
+        <material name="${material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${z / 2}"/>
+        <geometry><box size="${x} ${y} ${z}"/></geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 ${z / 2}"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass / 12 * (y * y + z * z)}" ixy="0" ixz="0"
+                 iyy="${mass / 12 * (x * x + z * z)}" iyz="0"
+                 izz="${mass / 12 * (x * x + y * y)}"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="revolute" params="name parent child z axis lower upper effort velocity">
+    <joint name="${name}" type="revolute">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <origin xyz="0 0 ${z}"/>
+      <axis xyz="${axis}"/>
+      <limit lower="${lower}" upper="${upper}" effort="${effort}" velocity="${velocity}"/>
+      <dynamics damping="0.5" friction="0.0"/>
+    </joint>
+  </xacro:macro>
+
+</robot>

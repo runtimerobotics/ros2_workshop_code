@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- demo_arm: a five-joint RRBot-style arm with a two-jaw gripper and sensors.
+
+     xacro demo_arm.urdf.xacro                      plain model, for RViz
+     xacro demo_arm.urdf.xacro sim:=mock            + ros2_control with mock hardware (MoveIt demo)
+     xacro demo_arm.urdf.xacro sim:=gazebo controllers:=/path/controllers.yaml
+                                                    + Gazebo sensors and gz_ros2_control
+-->
+<robot name="demo_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="sim" default="none"/>
+  <xacro:arg name="controllers" default=""/>
+  <xacro:arg name="attachables" default="red_box blue_box"/>
+  <xacro:arg name="camera_x" default="0.40"/>
+  <xacro:arg name="camera_z" default="1.0"/>
+
+  <xacro:include filename="materials.xacro"/>
+  <xacro:include filename="macros.xacro"/>
+  <xacro:include filename="demo_arm.xacro"/>
+  <xacro:include filename="sensors.xacro"/>
+  <xacro:include filename="demo_arm.ros2_control.xacro"/>
+  <xacro:include filename="gazebo.xacro"/>
+
+  <link name="world"/>
+  <xacro:demo_arm parent="world"/>
+  <xacro:demo_sensors camera_x="$(arg camera_x)" camera_z="$(arg camera_z)"/>
+
+  <xacro:property name="sim" value="$(arg sim)"/>
+  <xacro:if value="${sim in ('mock', 'gazebo')}">
+    <xacro:demo_arm_ros2_control sim="${sim}"/>
+  </xacro:if>
+  <xacro:if value="${sim == 'gazebo'}">
+    <xacro:demo_arm_gazebo controllers="$(arg controllers)" attachables="$(arg attachables)"/>
+  </xacro:if>
+</robot>

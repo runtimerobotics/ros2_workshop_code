@@ -1,0 +1,6 @@
+# Loaded by params.launch.py. The key is the node's full name: namespace/name.
+/styled/turtlesim:
+  ros__parameters:
+    background_r: 20
+    background_g: 40
+    background_b: 120

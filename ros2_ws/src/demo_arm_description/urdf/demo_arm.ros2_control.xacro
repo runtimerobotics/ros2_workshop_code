@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- ros2_control: which joints are commanded and what they report.
+     sim:=gazebo  → gz_ros2_control drives the joints in Gazebo
+     sim:=mock    → mock_components copies commands to states (no physics), for RViz and MoveIt -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="demo_arm_ros2_control" params="sim">
+    <ros2_control name="DemoArmSystem" type="system">
+      <hardware>
+        <xacro:if value="${sim == 'gazebo'}">
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </xacro:if>
+        <xacro:if value="${sim == 'mock'}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="calculate_dynamics">true</param>
+        </xacro:if>
+      </hardware>
+
+      <xacro:macro name="arm_joint" params="name initial">
+        <joint name="${name}">
+          <command_interface name="position"/>
+          <state_interface name="position"><param name="initial_value">${initial}</param></state_interface>
+          <state_interface name="velocity"/>
+        </joint>
+      </xacro:macro>
+      <!-- start in the "home" pose from the MoveIt SRDF: folded back, clear of the camera's view of the table -->
+      <xacro:arm_joint name="joint1" initial="0.0"/>
+      <xacro:arm_joint name="joint2" initial="-0.4"/>
+      <xacro:arm_joint name="joint3" initial="1.9"/>
+      <xacro:arm_joint name="joint4" initial="1.0"/>
+      <xacro:arm_joint name="joint5" initial="0.0"/>
+      <xacro:arm_joint name="left_finger_joint" initial="0.04"/>
+      <xacro:arm_joint name="right_finger_joint" initial="0.04"/>
+    </ros2_control>
+  </xacro:macro>
+</robot>

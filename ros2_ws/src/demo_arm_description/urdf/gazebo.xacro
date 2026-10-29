@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!-- Gazebo Harmonic: sensors, friction, ros2_control, and attachable objects.
+     Each sensor publishes a Gazebo topic; ros_gz_bridge (demo_arm_gazebo/config/bridge.yaml)
+     turns them into ROS topics. The world must load the Sensors, Imu, ForceTorque, and
+     Contact systems: demo_arm_gazebo/worlds/table.sdf does. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="demo_arm_gazebo" params="controllers attachables">
+
+    <!-- ros2_control inside Gazebo: loads the controller_manager with these controllers -->
+    <gazebo>
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>${controllers}</parameters>
+      </plugin>
+    </gazebo>
+
+    <!-- Intel RealSense D435, simulated as an RGB-D camera: colour and depth are aligned,
+         like the driver's align_depth mode. 640x480 at 30 Hz, 69° horizontal field of view,
+         depth from 0.3 m to 3 m with 5 mm noise. Images are labelled with the optical frame;
+         the point cloud is in the sensor's x-forward frame, which points_frame_fix.py labels. -->
+    <gazebo reference="camera_color_frame">
+      <sensor name="realsense_d435" type="rgbd_camera">
+        <always_on>true</always_on>
+        <update_rate>30</update_rate>
+        <visualize>false</visualize>
+        <topic>camera</topic>
+        <gz_frame_id>camera_color_optical_frame</gz_frame_id>
+        <camera>
+          <horizontal_fov>1.204</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>10.0</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.3</near>
+              <far>3.0</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </camera>
+      </sensor>
+    </gazebo>
+
+    <!-- 2D lidar: 360 samples, 10 Hz, 0.12 to 3.5 m, 1 cm noise -->
+    <gazebo reference="lidar_link">
+      <sensor name="lidar" type="gpu_lidar">
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <topic>scan</topic>
+        <gz_frame_id>lidar_link</gz_frame_id>
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.14159</min_angle>
+              <max_angle>3.14159</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.12</min>
+            <max>3.5</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </lidar>
+      </sensor>
+    </gazebo>
+
+    <!-- IMU in the palm: orientation, angular velocity, linear acceleration at 100 Hz -->
+    <gazebo reference="imu_link">
+      <sensor name="imu" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <topic>imu</topic>
+        <gz_frame_id>imu_link</gz_frame_id>
+        <imu>
+          <angular_velocity>
+            <x><noise type="gaussian"><mean>0</mean><stddev>0.002</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0</mean><stddev>0.002</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0</mean><stddev>0.002</stddev></noise></z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x><noise type="gaussian"><mean>0</mean><stddev>0.02</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0</mean><stddev>0.02</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0</mean><stddev>0.02</stddev></noise></z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+    </gazebo>
+
+    <!-- force-torque at the wrist roll joint: what the gripper and its load push on the arm -->
+    <gazebo reference="joint5">
+      <sensor name="wrist_ft" type="force_torque">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <topic>wrist_ft</topic>
+        <force_torque>
+          <frame>child</frame>
+          <measure_direction>child_to_parent</measure_direction>
+        </force_torque>
+      </sensor>
+    </gazebo>
+
+    <!-- contact sensors and grip friction on both fingers -->
+    <xacro:macro name="finger_gazebo" params="side">
+      <gazebo reference="${side}_finger_link">
+        <mu1>2.0</mu1>
+        <mu2>2.0</mu2>
+        <sensor name="${side}_finger_contact" type="contact">
+          <always_on>true</always_on>
+          <update_rate>50</update_rate>
+          <topic>${side}_finger/contact</topic>
+          <contact>
+            <collision>${side}_finger_link_collision</collision>
+            <topic>${side}_finger/contact</topic>
+          </contact>
+        </sensor>
+      </gazebo>
+    </xacro:macro>
+    <xacro:finger_gazebo side="left"/>
+    <xacro:finger_gazebo side="right"/>
+
+    <!-- Attach and detach objects to the palm. Physics grasps of small boxes slip, so the
+         pick-and-place demo locks the box to the gripper once it has closed, like a vacuum
+         cup would. Gazebo starts each joint attached; the spawn launch detaches them. -->
+    <xacro:macro name="attachable" params="names">
+      <xacro:if value="${len(names.strip()) > 0}">
+        <xacro:property name="first" value="${names.split(' ')[0]}"/>
+        <xacro:property name="rest" value="${' '.join(names.split(' ')[1:])}"/>
+        <gazebo>
+          <plugin filename="gz-sim-detachable-joint-system" name="gz::sim::systems::DetachableJoint">
+            <parent_link>link5</parent_link>
+            <child_model>${first}</child_model>
+            <child_link>link</child_link>
+            <attach_topic>/demo_arm/${first}/attach</attach_topic>
+            <detach_topic>/demo_arm/${first}/detach</detach_topic>
+            <output_topic>/demo_arm/${first}/state</output_topic>
+          </plugin>
+        </gazebo>
+        <xacro:attachable names="${rest}"/>
+      </xacro:if>
+    </xacro:macro>
+    <xacro:attachable names="${attachables}"/>
+
+  </xacro:macro>
+</robot>

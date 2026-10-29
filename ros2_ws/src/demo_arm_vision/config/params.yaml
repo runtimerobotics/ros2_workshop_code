@@ -1,0 +1,27 @@
+# Settings for the vision and pick-and-place nodes. Tune here, no rebuild needed.
+object_detector:
+  ros__parameters:
+    target_frame: world
+    min_area: 80              # pixels: smaller blobs are noise
+    # HSV ranges for OpenCV (H 0-180, S and V 0-255). Red wraps around 0, so it has two.
+    colors: [red, blue]
+    red_ranges: [0, 120, 70, 10, 255, 255, 170, 120, 70, 180, 255, 255]
+    blue_ranges: [100, 120, 70, 130, 255, 255]
+    box_size: 0.04            # m, used for the markers and the planning scene
+
+scene_updater:
+  ros__parameters:
+    box_size: 0.04
+    table: [0.40, 0.0, 0.09, 0.50, 0.60, 0.02]   # centre x y z, size x y z (m)
+
+pick_and_place:
+  ros__parameters:
+    # use_vision is set by the launch file (use_vision:=true|false)
+    pick_order: [red, blue]
+    # box positions (x, y in world, one pair per colour in pick_order) when use_vision is false
+    fixed_positions: [0.36, 0.10, 0.48, -0.04]
+    table_height: 0.10        # m, top of the table
+    box_size: 0.04
+    approach: 0.08            # m above the grasp for the pre-grasp pose
+    place: [0.28, -0.20]      # tray centre (x, y)
+    detection_timeout: 10.0   # s to wait for a detection

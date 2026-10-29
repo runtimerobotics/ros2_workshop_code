@@ -1,0 +1,13 @@
+# Parameters for turtlesim and the demo nodes, loaded by turtlesim_demo.launch.py
+turtlesim:
+  ros__parameters:
+    background_r: 30
+    background_g: 40
+    background_b: 80
+draw_circle:
+  ros__parameters:
+    linear: 2.0
+    angular: 1.0
+pose_monitor:
+  ros__parameters:
+    margin: 1.0
