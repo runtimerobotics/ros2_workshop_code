@@ -1,6 +1,6 @@
 // Service server in C++: the same /add_two_ints as demo_py, so either client works.
 //   ros2 run demo_cpp add_two_ints_server
-//   ros2 run demo_py add_two_ints_client 4 5
+//   ros2 run demo_py add_two_ints_client          # sum: 5
 #include <memory>
 
 #include "example_interfaces/srv/add_two_ints.hpp"

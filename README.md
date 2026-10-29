@@ -65,6 +65,8 @@ No Ubuntu 24.04? Use the container in [`docker/`](docker).
 
 ## Quick start
 
+A taste of each day. The full list is in [`ros2_ws/README.md`](ros2_ws/README.md).
+
 ```bash
 # Day 1: two nodes talking
 ros2 run demo_py talker
@@ -82,6 +84,19 @@ ros2 launch demo_arm_moveit demo.launch.py
 ros2 launch demo_arm_vision pick_place_demo.launch.py
 ros2 launch demo_arm_vision pick_place_demo.launch.py use_vision:=false   # fixed box poses
 ```
+
+## Run the examples
+
+Step-by-step commands, with the output to expect:
+
+| Guide | Covers |
+|---|---|
+| [`00_linux_basics/`](00_linux_basics/README.md) | terminal commands and the shell scripts |
+| [`01_python_basics/`](01_python_basics/README.md) | `python3 01_basics.py` … the exercise and its checks |
+| [`02_cpp_cmake_basics/`](02_cpp_cmake_basics/README.md) | `cmake` configure, build, run, and `ctest` |
+| [**`ros2_ws/README.md`**](ros2_ws/README.md) | **every ROS 2 node and launch file, package by package, Day 1 to Day 3** |
+| [`labs/`](labs/README.md) | the workshop labs: goal, commands, what "done" looks like |
+| [`docker/`](docker/README.md) | the same, inside a container |
 
 ## How pick and place works
 
