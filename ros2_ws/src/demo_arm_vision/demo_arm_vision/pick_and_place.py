@@ -6,7 +6,7 @@ For each box:
     2. add it to the planning scene, open the gripper
     3. plan to a pre-grasp pose above it (OMPL)
     4. move straight down (Pilz LIN)
-    5. attach it to the hand: in MoveIt and in Gazebo; close the gripper
+    5. attach it to the hand: in MoveIt and in Gazebo; close the gripper to the box width
     6. lift straight up, move over the tray, lower straight down
     7. detach it, open the gripper, retreat, and go home
 
@@ -22,8 +22,10 @@ import time
 from demo_arm_vision import scene
 from demo_arm_vision.geometry import top_down_quaternion
 from geometry_msgs.msg import PoseStamped
+from moveit.core.robot_state import RobotState
 from moveit.planning import MoveItPy, PlanRequestParameters
 from moveit_msgs.srv import ApplyPlanningScene
+import numpy as np
 import rclpy
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
@@ -124,6 +126,14 @@ class PickAndPlace:
         goal = self.tool_pose(x, y, z, yaw)
         self.run(self.arm, what, straight, pose_stamped_msg=goal, pose_link='tool0')
 
+    def grip(self, width):
+        # a finger joint is its inner face's distance from the centre: stop at the box sides,
+        # not at 0 ('close'), which would drive the fingers through the box locked to the palm
+        state = RobotState(self.moveit.get_robot_model())
+        state.set_joint_group_positions('gripper', np.array([width / 2, width / 2]))
+        state.update()
+        self.run(self.gripper, 'close gripper', robot_state=state)
+
     def pick_and_place(self, color, slot):
         h, name = self.h, f'{color}_box'
         x, y, z, yaw = h.locate(color)
@@ -136,7 +146,7 @@ class PickAndPlace:
         self.move_arm('approach (straight down)', x, y, grasp_z, yaw, straight=True)
         h.apply_scene(scene.attach(name))
         h.gazebo(color, 'attach')
-        self.run(self.gripper, 'close gripper', configuration_name='close')
+        self.grip(h.box)
         self.move_arm('lift (straight up)', x, y, grasp_z + h.approach, yaw, straight=True)
         # side by side in the tray, 5 cm apart along x
         px, py = h.place_xy[0] + (slot - (len(h.order) - 1) / 2) * 0.05, h.place_xy[1]
