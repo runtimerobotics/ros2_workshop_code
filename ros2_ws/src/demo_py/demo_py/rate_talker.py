@@ -13,6 +13,7 @@ from std_msgs.msg import String
 
 
 class RateTalker(Node):
+
     def __init__(self):
         super().__init__('rate_talker')
         self.declare_parameter('rate', 2.0, ParameterDescriptor(
@@ -41,7 +42,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(RateTalker())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

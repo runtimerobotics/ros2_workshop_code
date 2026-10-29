@@ -20,7 +20,7 @@ setup(
     maintainer_email='maintainer@example.com',
     description='tf2 in Python: static and dynamic broadcasters, a listener, and turtle following',
     license='Apache-2.0',
-    tests_require=['pytest'],
+    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'static_frames = demo_tf2.static_frames:main',

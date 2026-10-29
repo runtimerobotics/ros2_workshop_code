@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class LoggingDemo(Node):
+
     def __init__(self):
         super().__init__('logging_demo')
         self.started = False
@@ -22,7 +23,7 @@ class LoggingDemo(Node):
             self.started = True
             log.debug('raw scan received')
             log.info('robot ready')
-            log.warn('battery below 20%')
+            log.warning('battery below 20%')
             log.error('lidar timeout')
             log.fatal('motor driver lost')
         log.info('tick', throttle_duration_sec=1.0)
@@ -32,7 +33,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(LoggingDemo())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

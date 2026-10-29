@@ -1,5 +1,5 @@
 """
-Gazebo Harmonic with demo_arm on a table: sensors, controllers, and the ROS bridge.
+Gazebo (Harmonic on Jazzy, Jetty on Lyrical) with demo_arm on a table: sensors, controllers, and the ROS bridge.
 
 Run:
     ros2 launch demo_arm_gazebo sim.launch.py
@@ -57,7 +57,8 @@ def generate_launch_description():
     detach = ExecuteProcess(
         cmd=['bash', '-c', f'for i in 1 2 3 4 5 6; do {release}; sleep 1; done'])
     spawners = Node(package='controller_manager', executable='spawner',
-                    arguments=['joint_state_broadcaster', 'arm_controller', 'gripper_controller'])
+                    arguments=['joint_state_broadcaster', 'arm_controller', 'gripper_controller',
+                               '--param-file', controllers])
 
     realsense = get_package_share_directory('realsense2_description')
     return LaunchDescription([

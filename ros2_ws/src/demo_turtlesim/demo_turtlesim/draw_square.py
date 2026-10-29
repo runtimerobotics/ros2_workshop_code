@@ -11,7 +11,11 @@ from demo_turtlesim.go_to_goal import wrap
 from geometry_msgs.msg import Twist
 import rclpy
 from rclpy.node import Node
-from turtlesim.msg import Pose
+
+try:                                    # Kilted and newer: turtlesim_msgs
+    from turtlesim_msgs.msg import Pose
+except ImportError:                     # Jazzy
+    from turtlesim.msg import Pose
 
 
 def square_corners(x, y, side):
@@ -19,6 +23,7 @@ def square_corners(x, y, side):
 
 
 class DrawSquare(Node):
+
     def __init__(self):
         super().__init__('draw_square')
         self.declare_parameter('side', 4.0)
@@ -60,7 +65,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(DrawSquare())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

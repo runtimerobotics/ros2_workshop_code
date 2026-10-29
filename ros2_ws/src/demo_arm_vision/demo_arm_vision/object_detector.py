@@ -32,6 +32,7 @@ DRAW = {'red': (0, 0, 255), 'blue': (255, 0, 0), 'green': (0, 200, 0), 'yellow':
 
 
 class ObjectDetector(Node):
+
     def __init__(self):
         super().__init__('object_detector')
         self.target_frame = self.declare_parameter('target_frame', 'world').value
@@ -109,8 +110,8 @@ class ObjectDetector(Node):
                 p = self.tf.transform(point, self.target_frame,
                                       timeout=Duration(seconds=0.1)).point
             except TransformException as ex:
-                self.get_logger().warn(f'no transform to {self.target_frame}: {ex}',
-                                       throttle_duration_sec=5.0)
+                self.get_logger().warning(f'no transform to {self.target_frame}: {ex}',
+                                          throttle_duration_sec=5.0)
                 return
             # the camera sees the top face: the box centre is half a box lower
             pose = PoseStamped()
@@ -145,7 +146,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(ObjectDetector())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

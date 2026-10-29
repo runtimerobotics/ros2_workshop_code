@@ -20,7 +20,7 @@ setup(
     maintainer_email='maintainer@example.com',
     description='RealSense box detection with OpenCV and pick and place with MoveItPy',
     license='Apache-2.0',
-    tests_require=['pytest'],
+    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'object_detector = demo_arm_vision.object_detector:main',

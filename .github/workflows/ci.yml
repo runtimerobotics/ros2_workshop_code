@@ -5,9 +5,20 @@ on:
   pull_request:
 
 jobs:
-  jazzy:
+  build:
+    name: ${{ matrix.distro }} (Ubuntu ${{ matrix.ubuntu }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: jazzy
+            ubuntu: "24.04"
+          - distro: lyrical
+            ubuntu: "26.04"
     runs-on: ubuntu-24.04
-    container: osrf/ros:jazzy-desktop-full
+    container: osrf/ros:${{ matrix.distro }}-desktop-full
+    env:
+      ROS_DISTRO: ${{ matrix.distro }}
     defaults:
       run:
         shell: bash
@@ -18,17 +29,17 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends \
-            ros-jazzy-ros-gz ros-jazzy-gz-ros2-control \
-            ros-jazzy-ros2-control ros-jazzy-ros2-controllers \
-            ros-jazzy-moveit ros-jazzy-moveit-py ros-jazzy-pick-ik \
-            ros-jazzy-realsense2-description ros-jazzy-cv-bridge python3-opencv
-          source /opt/ros/jazzy/setup.bash
+            ros-${ROS_DISTRO}-ros-gz ros-${ROS_DISTRO}-gz-ros2-control \
+            ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers \
+            ros-${ROS_DISTRO}-moveit ros-${ROS_DISTRO}-moveit-py ros-${ROS_DISTRO}-pick-ik \
+            ros-${ROS_DISTRO}-realsense2-description ros-${ROS_DISTRO}-cv-bridge python3-opencv
+          source /opt/ros/${ROS_DISTRO}/setup.bash
           rosdep update
           rosdep install --from-paths ros2_ws/src --ignore-src -y
 
       - name: Basics (shell, Python, C++)
         run: |
-          source /opt/ros/jazzy/setup.bash     # 03_callbacks.py imports std_msgs
+          source /opt/ros/${ROS_DISTRO}/setup.bash     # 03_callbacks.py imports std_msgs
           bash 00_linux_basics/navigate_exercise.sh > /dev/null
           bash 00_linux_basics/scripts/hello.sh CI 2
           for f in 01_python_basics/0[1-4]_*.py; do python3 "$f"; done
@@ -38,16 +49,16 @@ jobs:
 
       - name: Build
         run: |
-          source /opt/ros/jazzy/setup.bash
+          source /opt/ros/${ROS_DISTRO}/setup.bash
           cd ros2_ws && colcon build --symlink-install --event-handlers console_cohesion+
 
       - name: Test
         run: |
-          source /opt/ros/jazzy/setup.bash
+          source /opt/ros/${ROS_DISTRO}/setup.bash
           cd ros2_ws && colcon test && colcon test-result --verbose
 
       - name: Smoke-run the examples
         run: |
-          source /opt/ros/jazzy/setup.bash
+          source /opt/ros/${ROS_DISTRO}/setup.bash
           source ros2_ws/install/setup.bash
           bash ros2_ws/scripts/smoke_test.sh

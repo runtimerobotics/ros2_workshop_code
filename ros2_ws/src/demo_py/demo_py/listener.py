@@ -10,6 +10,7 @@ from std_msgs.msg import String
 
 
 class Listener(Node):
+
     def __init__(self):
         super().__init__('listener')
         self.sub = self.create_subscription(
@@ -23,7 +24,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(Listener())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

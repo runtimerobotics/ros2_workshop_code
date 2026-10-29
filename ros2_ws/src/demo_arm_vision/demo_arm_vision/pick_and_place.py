@@ -31,6 +31,7 @@ from std_msgs.msg import Empty
 
 
 class StepFailed(RuntimeError):
+
     pass
 
 
@@ -91,6 +92,7 @@ class Helper(Node):
 
 
 class PickAndPlace:
+
     def __init__(self, helper):
         self.h = helper
         self.log = helper.get_logger()
@@ -166,7 +168,7 @@ def main():
         demo.main()
     except StepFailed as e:
         helper.get_logger().error(str(e))
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
     demo.moveit.shutdown()
     rclpy.shutdown()

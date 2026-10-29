@@ -6,10 +6,15 @@ Run:
 """
 import rclpy
 from rclpy.node import Node
-from turtlesim.srv import Spawn, TeleportAbsolute
+
+try:                                    # Kilted and newer: turtlesim_msgs
+    from turtlesim_msgs.srv import Spawn, TeleportAbsolute
+except ImportError:                     # Jazzy
+    from turtlesim.srv import Spawn, TeleportAbsolute
 
 
 class SpawnTurtle(Node):
+
     def __init__(self):
         super().__init__('spawn_turtle')
         for name, value in (('name', 'turtle2'), ('x', 2.0), ('y', 2.0), ('theta', 0.0)):

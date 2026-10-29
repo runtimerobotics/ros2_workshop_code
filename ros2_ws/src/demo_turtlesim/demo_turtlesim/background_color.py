@@ -13,6 +13,7 @@ from rclpy.parameter_client import AsyncParameterClient
 
 
 class BackgroundColor(Node):
+
     def __init__(self):
         super().__init__('background_color')
         for name, value in (('r', 200), ('g', 86), ('b', 255), ('target', '/turtlesim')):

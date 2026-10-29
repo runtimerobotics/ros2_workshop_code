@@ -21,7 +21,7 @@ setup(
     maintainer_email='maintainer@example.com',
     description='Turtlesim labs in Python: drive, draw, spawn, rotate, and recolour',
     license='Apache-2.0',
-    tests_require=['pytest'],
+    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'draw_circle = demo_turtlesim.draw_circle:main',

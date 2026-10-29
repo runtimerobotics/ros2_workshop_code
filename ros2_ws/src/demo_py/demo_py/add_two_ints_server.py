@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class MinimalService(Node):
+
     def __init__(self):
         super().__init__('minimal_service')
         self.srv = self.create_service(
@@ -27,7 +28,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(MinimalService())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

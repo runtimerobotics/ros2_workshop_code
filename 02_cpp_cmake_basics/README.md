@@ -20,6 +20,6 @@ cd build && ctest --output-on-failure
 |---|---|---|
 | `add_executable(robot_demo app/main.cpp)` | build a program | the same |
 | `add_library(robot src/robot.cpp)` | build reusable code | the same |
-| `target_link_libraries(robot_demo PRIVATE robot)` | use a library | `ament_target_dependencies(talker rclcpp std_msgs)` |
+| `target_link_libraries(robot_demo PRIVATE robot)` | use a library | `target_link_libraries(talker rclcpp::rclcpp ${std_msgs_TARGETS})` |
 | `add_test(...)` + `ctest` | run tests | `colcon test` |
 | *(none)* | | `install(TARGETS ...)` so `ros2 run` can find it |

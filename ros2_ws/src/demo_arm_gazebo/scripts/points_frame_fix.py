@@ -14,6 +14,7 @@ from sensor_msgs.msg import PointCloud2
 
 
 class PointsFrameFix(Node):
+
     def __init__(self):
         super().__init__('points_frame_fix')
         self.frame = self.declare_parameter('frame_id', 'camera_color_frame').value
@@ -30,7 +31,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(PointsFrameFix())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

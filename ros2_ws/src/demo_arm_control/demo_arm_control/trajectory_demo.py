@@ -34,6 +34,7 @@ def trajectory(joints, points):
 
 
 class TrajectoryDemo(Node):
+
     def __init__(self):
         super().__init__('trajectory_demo')
         self.arm = ActionClient(

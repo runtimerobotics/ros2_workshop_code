@@ -23,6 +23,6 @@ One page per hands-on block in the slides. Each lab lists its goal, the commands
 Every terminal needs ROS and the workspace sourced:
 
 ```bash
-source /opt/ros/jazzy/setup.bash
+source /opt/ros/jazzy/setup.bash                  # Lyrical: /opt/ros/lyrical/setup.bash
 source ~/ros2_workshop_code/ros2_ws/install/setup.bash
 ```

@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class DrawCircle(Node):
+
     def __init__(self):
         super().__init__('draw_circle')
         self.declare_parameter('linear', 2.0)    # m/s, along x (forward)
@@ -31,7 +32,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(DrawCircle())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class MinimalClientAsync(Node):
+
     def __init__(self):
         super().__init__('minimal_client_async')
         self.cli = self.create_client(AddTwoInts, 'add_two_ints')

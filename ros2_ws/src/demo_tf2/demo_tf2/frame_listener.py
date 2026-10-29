@@ -13,6 +13,7 @@ from tf2_ros.transform_listener import TransformListener
 
 
 class FrameListener(Node):
+
     def __init__(self):
         super().__init__('frame_listener')
         self.target = self.declare_parameter('target', 'world').value
@@ -35,7 +36,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(FrameListener())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

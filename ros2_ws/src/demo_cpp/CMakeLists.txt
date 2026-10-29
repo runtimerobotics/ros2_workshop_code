@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(demo_cpp)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -11,16 +11,16 @@ find_package(std_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
 
 add_executable(talker src/talker.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
+target_link_libraries(talker rclcpp::rclcpp ${std_msgs_TARGETS})
 
 add_executable(listener src/listener.cpp)
-ament_target_dependencies(listener rclcpp std_msgs)
+target_link_libraries(listener rclcpp::rclcpp ${std_msgs_TARGETS})
 
 add_executable(add_two_ints_server src/add_two_ints_server.cpp)
-ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
+target_link_libraries(add_two_ints_server rclcpp::rclcpp ${example_interfaces_TARGETS})
 
 add_executable(param_node src/param_node.cpp)
-ament_target_dependencies(param_node rclcpp)
+target_link_libraries(param_node rclcpp::rclcpp)
 
 # Install into lib/demo_cpp so `ros2 run demo_cpp <name>` finds them
 install(TARGETS talker listener add_two_ints_server param_node

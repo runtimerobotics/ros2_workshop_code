@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class AddThreeIntsServer(Node):
+
     def __init__(self):
         super().__init__('add_three_ints_server')
         self.srv = self.create_service(AddThreeInts, 'add_three_ints', self.add)
@@ -25,7 +26,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(AddThreeIntsServer())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

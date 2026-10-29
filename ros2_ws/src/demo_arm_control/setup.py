@@ -20,7 +20,7 @@ setup(
     maintainer_email='maintainer@example.com',
     description='ros2_control controllers for demo_arm, mock hardware, and trajectory demos',
     license='Apache-2.0',
-    tests_require=['pytest'],
+    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'trajectory_demo = demo_arm_control.trajectory_demo:main',

@@ -30,7 +30,8 @@ def generate_launch_description():
         Node(package='controller_manager', executable='ros2_control_node',
              parameters=[controllers]),
         Node(package='controller_manager', executable='spawner',
-             arguments=['joint_state_broadcaster', 'arm_controller', 'gripper_controller']),
+             arguments=['joint_state_broadcaster', 'arm_controller', 'gripper_controller',
+                        '--param-file', controllers]),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(moveit, 'launch', 'move_group.launch.py')),
             launch_arguments={'rviz': LaunchConfiguration('rviz')}.items()),

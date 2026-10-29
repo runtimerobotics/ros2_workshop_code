@@ -15,6 +15,7 @@ from rclpy.node import Node
 
 
 class FibonacciActionServer(Node):
+
     def __init__(self):
         super().__init__('fibonacci_action_server')
         self._server = ActionServer(
@@ -40,7 +41,7 @@ def main():
     try:
         # several threads, so a cancel request is handled while execute() runs
         rclpy.spin(FibonacciActionServer(), executor=MultiThreadedExecutor())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

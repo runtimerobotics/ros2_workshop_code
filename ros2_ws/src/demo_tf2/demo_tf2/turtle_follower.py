@@ -12,10 +12,15 @@ from rclpy.time import Time
 from tf2_ros import TransformException
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
-from turtlesim.srv import Spawn
+
+try:                                    # Kilted and newer: turtlesim_msgs
+    from turtlesim_msgs.srv import Spawn
+except ImportError:                     # Jazzy
+    from turtlesim.srv import Spawn
 
 
 class TurtleFollower(Node):
+
     def __init__(self):
         super().__init__('turtle_follower')
         self.leader = self.declare_parameter('leader', 'turtle1').value
@@ -49,7 +54,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(TurtleFollower())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

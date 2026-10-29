@@ -9,7 +9,11 @@ import math
 from geometry_msgs.msg import Twist
 import rclpy
 from rclpy.node import Node
-from turtlesim.msg import Pose
+
+try:                                    # Kilted and newer: turtlesim_msgs
+    from turtlesim_msgs.msg import Pose
+except ImportError:                     # Jazzy
+    from turtlesim.msg import Pose
 
 
 def wrap(angle):
@@ -18,6 +22,7 @@ def wrap(angle):
 
 
 class GoToGoal(Node):
+
     def __init__(self):
         super().__init__('go_to_goal')
         self.names = ('x', 'y', 'tolerance', 'k_linear', 'k_angular')
@@ -53,7 +58,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(GoToGoal())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

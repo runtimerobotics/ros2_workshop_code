@@ -13,6 +13,7 @@ from tf2_ros.static_transform_broadcaster import (
 
 
 class StaticFrames(Node):
+
     def __init__(self):
         super().__init__('static_frames')
         t = TransformStamped()
@@ -30,7 +31,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(StaticFrames())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

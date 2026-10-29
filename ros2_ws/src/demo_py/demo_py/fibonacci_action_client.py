@@ -15,6 +15,7 @@ from rclpy.node import Node
 
 
 class FibonacciActionClient(Node):
+
     def __init__(self):
         super().__init__('fibonacci_action_client')
         self._client = ActionClient(self, Fibonacci, 'fibonacci')
@@ -46,7 +47,7 @@ def main():
     client.send_goal(int(sys.argv[1]) if len(sys.argv) > 1 else 10)
     try:
         rclpy.spin(client)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

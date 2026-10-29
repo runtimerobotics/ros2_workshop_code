@@ -14,14 +14,13 @@ from rclpy.node import Node
 
 
 class Robot(Node):
+
     def __init__(self):
         super().__init__('robot')
-        self.create_timer(
-            2.0, self.plan,
-            callback_group=MutuallyExclusiveCallbackGroup())
-        self.create_timer(
-            0.5, self.control,
-            callback_group=MutuallyExclusiveCallbackGroup())
+        slow = MutuallyExclusiveCallbackGroup()   # one group per timer:
+        fast = MutuallyExclusiveCallbackGroup()   # they may run at the same time
+        self.create_timer(2.0, self.plan, callback_group=slow)
+        self.create_timer(0.5, self.control, callback_group=fast)
 
     def plan(self):
         time.sleep(1.5)                  # slow work
@@ -33,11 +32,9 @@ class Robot(Node):
 
 def main():
     rclpy.init()
-    executor = MultiThreadedExecutor()
-    executor.add_node(Robot())
     try:
-        executor.spin()
-    except KeyboardInterrupt:
+        rclpy.spin(Robot(), executor=MultiThreadedExecutor())
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

@@ -3,7 +3,7 @@
 <package format="3">
   <name>demo_arm_gazebo</name>
   <version>1.0.0</version>
-  <description>Gazebo Harmonic world, ROS bridge, and launch for demo_arm with its sensors</description>
+  <description>Gazebo world, ROS bridge, and launch for demo_arm with its sensors</description>
   <maintainer email="maintainer@example.com">RUNTIME Robotics</maintainer>
   <license>Apache-2.0</license>
 

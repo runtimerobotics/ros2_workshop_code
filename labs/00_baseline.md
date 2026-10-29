@@ -4,7 +4,7 @@
 
 ```bash
 bash setup/check_setup.sh
-echo $ROS_DISTRO                 # jazzy
+echo $ROS_DISTRO                 # jazzy (or lyrical)
 ros2 doctor --report | head -30  # look at NETWORK CONFIGURATION and RMW MIDDLEWARE
 ```
 

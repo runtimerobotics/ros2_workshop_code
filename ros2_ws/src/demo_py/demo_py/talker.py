@@ -11,6 +11,7 @@ from std_msgs.msg import String
 
 
 class Talker(Node):
+
     def __init__(self):
         super().__init__('talker')
         self.pub = self.create_publisher(
@@ -28,7 +29,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(Talker())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

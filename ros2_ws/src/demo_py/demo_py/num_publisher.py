@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class NumPublisher(Node):
+
     def __init__(self):
         super().__init__('num_publisher')
         self.pub = self.create_publisher(Num, 'num', 10)
@@ -26,7 +27,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(NumPublisher())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

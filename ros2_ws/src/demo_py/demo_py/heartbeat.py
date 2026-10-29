@@ -9,6 +9,7 @@ from rclpy.node import Node
 
 
 class Heartbeat(Node):
+
     def __init__(self):
         super().__init__('heartbeat')
         self.timer = self.create_timer(
@@ -22,7 +23,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(Heartbeat())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

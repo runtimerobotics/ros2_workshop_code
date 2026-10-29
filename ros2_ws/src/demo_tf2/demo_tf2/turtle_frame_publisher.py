@@ -12,10 +12,15 @@ from geometry_msgs.msg import TransformStamped
 import rclpy
 from rclpy.node import Node
 from tf2_ros import TransformBroadcaster
-from turtlesim.msg import Pose
+
+try:                                    # Kilted and newer: turtlesim_msgs
+    from turtlesim_msgs.msg import Pose
+except ImportError:                     # Jazzy
+    from turtlesim.msg import Pose
 
 
 class FramePublisher(Node):
+
     def __init__(self):
         super().__init__('turtle_tf2_frame_publisher')
         self.turtlename = self.declare_parameter('turtlename', 'turtle1').value
@@ -39,7 +44,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(FramePublisher())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

@@ -6,11 +6,12 @@ output you should see. **T1**, **T2**, and **T3** are separate terminals. Stop a
 
 ## Before you start
 
-Build once, and after every change to a C++ file, `package.xml`, or `setup.py`:
+Build once, and after every change to a C++ file, `package.xml`, or `setup.py`. The commands
+are the same on ROS 2 Jazzy and Lyrical: on Lyrical, write `lyrical` where this page says `jazzy`.
 
 ```bash
 cd ~/ros2_workshop_code/ros2_ws
-source /opt/ros/jazzy/setup.bash
+source /opt/ros/jazzy/setup.bash                  # Lyrical: /opt/ros/lyrical/setup.bash
 rosdep install --from-paths src -y --ignore-src
 colcon build --symlink-install
 ```
@@ -18,9 +19,13 @@ colcon build --symlink-install
 Source the workspace in **every new terminal** (or add both lines to `~/.bashrc`):
 
 ```bash
-source /opt/ros/jazzy/setup.bash
+source /opt/ros/jazzy/setup.bash                  # Lyrical: /opt/ros/lyrical/setup.bash
 source ~/ros2_workshop_code/ros2_ws/install/setup.bash
 ```
+
+On Lyrical, `ros2 topic echo` stops at once with *Could not determine the type* when nothing
+publishes the topic yet. Start the publisher first, or give the type:
+`ros2 topic echo /chatter std_msgs/msg/String`.
 
 To check everything at once, run `bash scripts/smoke_test.sh`. It runs each example below
 briefly and prints ✓ or ✗ for each one. Set `SKIP_SIM=1` to skip the 3-minute Gazebo run.

@@ -16,6 +16,7 @@ from rclpy.node import Node
 
 
 class SceneUpdater(Node):
+
     def __init__(self):
         super().__init__('scene_updater')
         self.box_size = self.declare_parameter('box_size', 0.04).value
@@ -63,7 +64,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(SceneUpdater())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 

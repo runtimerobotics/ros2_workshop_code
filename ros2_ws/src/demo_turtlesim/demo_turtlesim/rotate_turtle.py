@@ -9,10 +9,15 @@ from action_msgs.msg import GoalStatus
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
-from turtlesim.action import RotateAbsolute
+
+try:                                    # Kilted and newer: turtlesim_msgs
+    from turtlesim_msgs.action import RotateAbsolute
+except ImportError:                     # Jazzy
+    from turtlesim.action import RotateAbsolute
 
 
 class RotateTurtle(Node):
+
     def __init__(self):
         super().__init__('rotate_turtle')
         self.declare_parameter('theta', 3.14)
@@ -35,7 +40,7 @@ class RotateTurtle(Node):
     def on_accepted(self, future):
         self.goal_handle = future.result()
         if not self.goal_handle.accepted:
-            self.get_logger().warn('goal rejected')
+            self.get_logger().warning('goal rejected')
             rclpy.shutdown()
             return
         self.get_logger().info('goal accepted')

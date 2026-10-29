@@ -1,9 +1,10 @@
 # Docker
 
-For machines without Ubuntu 24.04. Linux with X11 shows Gazebo and RViz windows directly.
+For machines without Ubuntu 24.04 or 26.04, or to try the other ROS 2 release. Linux with X11 shows Gazebo and RViz windows directly.
 
 ```bash
-docker build -t ros2_workshop -f docker/Dockerfile .
+docker build -t ros2_workshop -f docker/Dockerfile .                                 # ROS 2 Jazzy
+# or: docker build -t ros2_workshop --build-arg ROS_DISTRO=lyrical -f docker/Dockerfile .   # ROS 2 Lyrical
 bash docker/run.sh
 # inside the container
 colcon build --symlink-install && source install/setup.bash

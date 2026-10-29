@@ -11,6 +11,7 @@ from rclpy.node import Node
 
 
 class MinimalParam(Node):
+
     def __init__(self):
         super().__init__('minimal_param_node')
         self.declare_parameter('my_parameter', 'world')
@@ -33,7 +34,7 @@ def main():
     rclpy.init()
     try:
         rclpy.spin(MinimalParam())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
 
 
