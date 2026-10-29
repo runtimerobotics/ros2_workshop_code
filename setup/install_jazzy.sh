@@ -15,8 +15,12 @@ sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 sudo add-apt-repository -y universe
 
 echo "== 3. ROS 2 apt source"
-ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
-curl -L -o /tmp/ros2-apt-source.deb \
+# The newest ros-apt-source release. If api.github.com is blocked, look it up at
+# https://github.com/ros-infrastructure/ros-apt-source/releases and run: ROS_APT_SOURCE_VERSION=1.x.x bash <this script>
+ROS_APT_SOURCE_VERSION=${ROS_APT_SOURCE_VERSION:-$(curl -s ${GITHUB_TOKEN:+-H "Authorization: Bearer $GITHUB_TOKEN"} \
+  https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}' || true)}
+[[ -n "$ROS_APT_SOURCE_VERSION" ]] || { echo "Could not read the ros-apt-source release from api.github.com (see the comment above)." >&2; exit 1; }
+curl -fL -o /tmp/ros2-apt-source.deb \
   "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo "$VERSION_CODENAME")_all.deb"
 sudo dpkg -i /tmp/ros2-apt-source.deb
 

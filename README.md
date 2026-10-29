@@ -1,6 +1,7 @@
 # ROS 2 Workshop Code
 
 [![build and test](https://github.com/runtimerobotics/ros2_workshop_code/actions/workflows/ci.yml/badge.svg)](https://github.com/runtimerobotics/ros2_workshop_code/actions/workflows/ci.yml)
+[![install scripts](https://github.com/runtimerobotics/ros2_workshop_code/actions/workflows/install.yml/badge.svg)](https://github.com/runtimerobotics/ros2_workshop_code/actions/workflows/install.yml)
 [![ROS 2 Jazzy](https://img.shields.io/badge/ROS_2-Jazzy-22314E?logo=ros)](https://docs.ros.org/en/jazzy/)
 [![ROS 2 Lyrical](https://img.shields.io/badge/ROS_2-Lyrical-22314E?logo=ros)](https://docs.ros.org/en/lyrical/)
 [![Ubuntu 24.04 | 26.04](https://img.shields.io/badge/Ubuntu-24.04_%7C_26.04-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/download/desktop)
@@ -23,7 +24,7 @@ Slides: <https://runtimerobotics.github.io/ros2_workshop_slides/>
 
 | Folder or package | Day | What you learn |
 |---|---|---|
-| [`setup/`](setup) | before | install ROS 2 Jazzy (or Lyrical), check the machine is ready |
+| [`setup/`](setup/README.md) | before | step-by-step setup guide, install scripts for Jazzy and Lyrical, a readiness check |
 | [`00_linux_basics/`](00_linux_basics) | prerequisites | terminal commands and shell scripts |
 | [`01_python_basics/`](01_python_basics) | prerequisites | the Python a ROS node uses: classes and callbacks |
 | [`02_cpp_cmake_basics/`](02_cpp_cmake_basics) | prerequisites | C++ with CMake: a program, a library, a test |
@@ -96,6 +97,10 @@ class. The [`00_linux_basics/`](00_linux_basics), [`01_python_basics/`](01_pytho
 [`02_cpp_cmake_basics/`](02_cpp_cmake_basics) folders cover the rest before Day 1.
 
 ## Setup
+
+New to Ubuntu or ROS? Follow the step-by-step guide in [`setup/README.md`](setup/README.md):
+choosing Ubuntu or a virtual machine, what each step does, what you should see, and fixes for
+the common problems. The short version:
 
 ```bash
 git clone https://github.com/runtimerobotics/ros2_workshop_code.git

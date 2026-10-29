@@ -2,6 +2,8 @@
 
 **Goal:** every tool the workshop needs is installed, and two nodes can talk.
 
+Not installed yet? Follow [`setup/README.md`](../setup/README.md) first.
+
 ```bash
 bash setup/check_setup.sh
 echo $ROS_DISTRO                 # jazzy (or lyrical)
