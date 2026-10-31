@@ -10,6 +10,7 @@ Check each sensor: type, rate, frame.
 
 ```bash
 ros2 topic list -t | grep -E "camera|scan|imu|wrist|contact"
+ros2 control list_controllers                           # three active: the arm can move
 ros2 topic hz /camera/camera/color/image_raw            # 30 Hz at real time
 ros2 topic echo --once /camera/camera/color/camera_info # fx, fy, cx, cy
 ros2 topic hz /scan                                     # 10 Hz
@@ -30,3 +31,6 @@ gz topic -e -t /stats -n 1 | grep real_time_factor
 
 **Challenge:** change the lidar to 720 samples and 20 Hz in `gazebo.xacro`, rebuild,
 and measure the new rate.
+
+**Challenge:** raise the lidar noise in `gazebo.xacro` from `0.01` to `0.05` m, rebuild,
+and compare the scan of the table legs in RViz: the points spread out.

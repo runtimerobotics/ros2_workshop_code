@@ -27,3 +27,27 @@ urdf_to_graphviz /tmp/demo_arm.urdf demo_arm  # a PDF of links and joints
 
 **Challenge:** make the forearm (`link3`) 5 cm longer. What else must change? (Its joint
 origin, and the reach in the pick-and-place poses.) Rebuild, check, view.
+
+## Part 2 (Day 3 morning): joint space and task space
+
+**Goal:** see how joint angles (joint space) decide where the tool is (task space).
+
+```bash
+ros2 launch demo_arm_description display.launch.py
+ros2 topic echo /joint_states
+ros2 run tf2_ros tf2_echo base_link tool0          # the tool pose, live
+```
+
+Move one slider at a time and write down the tool position for three configurations.
+Then publish a pose yourself (close the slider window first: only one publisher may own `/joint_states`):
+
+```bash
+ros2 topic pub --once /joint_states sensor_msgs/msg/JointState \
+  "{name: [joint1, joint2, joint3, joint4, joint5, left_finger_joint, right_finger_joint],
+    position: [0.0, 1.6, 0.0, 0.0, 0.0, 0.02, 0.02]}"
+```
+
+**Done when** you can say why the tool cannot get further than about 0.7 m from the
+shoulder (the arm is stretched out: a singular configuration), and why it cannot point the
+tool in every direction at one spot (five joints, not six).
+
